@@ -17323,36 +17323,40 @@ return /******/ (function(modules) { // webpackBootstrap
 	  'log': function log(value) {
 	    if (!cache.has(value)) {
 	      cache.set(value, true);
-	      console.log(value);
+	      console.warn(value);
 	    }
 	  },
+             /**
+             * Generates the migrate warning message as a string.
+             *
+             * @static
+             * @memberOf config
+             * @param {Object} data Migrate message data.
+             */
+            'migrateMessage': function ( data ) {
 
-	  /**
-	   * Generates the migrate warning message as a string.
-	   *
-	   * @static
-	   * @memberOf config
-	   * @param {Object} data Migrate message data.
-	   */
-	  'migrateMessage': _.template([
-	    'lodash-migrate: _.<%= name %>(<%= args %>)',
-	    '  v<%= oldData.version %> => <%= oldData.result %>',
-	    '  v<%= newData.version %> => <%= newData.result %>'
-	  ].join('\n')),
+                return [
+                    'lodash-migrate: _.' + data.name + '(' + data.args + ')',
+                    '  v' + data.oldData.version + ' => ' + data.oldData.result,
+                    '  v' + data.newData.version + ' => ' + data.newData.result
+                ].join('\n');
+            },
 
-	  /**
-	   * Generates the rename warning message as a string.
-	   *
-	   * @static
-	   * @memberOf config
-	   * @param {Object} data Rename message data.
-	   */
-	  'renameMessage': _.template([
-	    'lodash-migrate: Method renamed',
-	    '  v<%= oldData.version %> => _.<%= oldData.name %>',
-	    '  v<%= newData.version %> => _.<%= newData.name %>'
-	  ].join('\n'))
-	};
+            /**
+             * Generates the rename warning message as a string.
+             *
+             * @static
+             * @memberOf config
+             * @param {Object} data Rename message data.
+             */
+            'renameMessage': function ( data ) {
+                return [
+                    'lodash-migrate: Method renamed',
+                    '  v' + data.oldData.version + ' => _.' + data.oldData.name,
+                    '  v' + data.newData.version + ' => _.' + data.newData.name
+                ].join('\n');
+            }
+        };
 
 
 /***/ },
